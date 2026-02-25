@@ -8,7 +8,7 @@ To configure the plugin add a `<configuration>` block for the plugin under the `
 <build>
     <plugins>
         <plugin>
-            <groupId>se.lfv.reqstool</groupId>
+            <groupId>io.github.reqstool</groupId>
             <artifactId>reqstool-maven-plugin</artifactId>
             <version>0.1.0</version>
             <configuration>
