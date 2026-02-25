@@ -1,4 +1,4 @@
-// Copyright © LFV
+// Copyright © reqstool
 package io.github.reqstool.plugins.maven;
 
 import java.io.File;
@@ -92,10 +92,10 @@ public class RequirementsToolMojo extends AbstractMojo {
 	public static final String XML_TESTS = "tests";
 
 	/** YAML language server schema annotation. */
-	protected static final String YAML_LANG_SERVER_SCHEMA_ANNOTATIONS = "# yaml-language-server: $schema=https://raw.githubusercontent.com/Luftfartsverket/reqstool-client/main/src/reqstool/resources/schemas/v1/annotations.schema.json";
+	protected static final String YAML_LANG_SERVER_SCHEMA_ANNOTATIONS = "# yaml-language-server: $schema=https://raw.githubusercontent.com/reqstool/reqstool-client/main/src/reqstool/resources/schemas/v1/annotations.schema.json";
 
 	/** YAML language server schema for configuration. */
-	protected static final String YAML_LANG_SERVER_SCHEMA_CONFIG = "# yaml-language-server: $schema=https://raw.githubusercontent.com/Luftfartsverket/reqstool-client/main/src/reqstool/resources/schemas/v1/reqstool_config.schema.json";
+	protected static final String YAML_LANG_SERVER_SCHEMA_CONFIG = "# yaml-language-server: $schema=https://raw.githubusercontent.com/reqstool/reqstool-client/main/src/reqstool/resources/schemas/v1/reqstool_config.schema.json";
 
 	/** ObjectMapper for YAML serialization and deserialization. */
 	protected static final ObjectMapper yamlMapper;

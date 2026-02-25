@@ -12,7 +12,7 @@
 
     <name>${project.artifactId}</name>
     <description>Reqstool - Maven Plugin</description>
-    <url>https://github.com/Luftfartsverket/reqstool-java-maven-plugin</url>
+    <url>https://github.com/reqstool/reqstool-java-maven-plugin</url>
 
     <licenses>
         <license>
@@ -23,24 +23,24 @@
 
     <developers>
         <developer>
-            <name>LFV System Developer Team</name>
-            <email>sysdev@lfv.se</email>
-            <organization>Luftfartsverket</organization>
-            <organizationUrl>http://www.lfv.se</organizationUrl>
+            <name>Reqstool Contributors</name>
+            <url>https://github.com/reqstool</url>
+            <organization>reqstool</organization>
+            <organizationUrl>https://github.com/reqstool</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/Luftfartsverket/reqstool-java-maven-plugin.git</connection>
-        <url>https://github.com/Luftfartsverket/reqstool-java-maven-plugin</url>
+        <connection>scm:git:https://github.com/reqstool/reqstool-java-maven-plugin.git</connection>
+        <url>https://github.com/reqstool/reqstool-java-maven-plugin</url>
     </scm>
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/Luftfartsverket/reqstool-java-maven-plugin/issues</url>
+        <url>https://github.com/reqstool/reqstool-java-maven-plugin/issues</url>
     </issueManagement>
     <ciManagement>
         <system>Github</system>
-        <url>https://github.com/Luftfartsverket/reqstool-java-maven-plugin/actions</url>
+        <url>https://github.com/reqstool/reqstool-java-maven-plugin/actions</url>
     </ciManagement>
 
     <properties>

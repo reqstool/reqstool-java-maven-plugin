@@ -1,4 +1,4 @@
-// Copyright © LFV
+// Copyright © reqstool
 package io.github.reqstool.plugins.maven;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
