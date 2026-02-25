@@ -1,5 +1,5 @@
 // Copyright © LFV
-package se.lfv.reqstool.plugins.maven;
+package io.github.reqstool.plugins.maven;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
