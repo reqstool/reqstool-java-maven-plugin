@@ -2,6 +2,6 @@
 
 name: reqstool-java-maven-plugin
 title: Reqstool Maven Plugin
-version: 0.1.0
+version: 1.0.0
 nav:
   - modules/ROOT/nav.adoc
