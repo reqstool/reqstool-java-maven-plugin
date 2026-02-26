@@ -27,12 +27,13 @@ jobs:
           distribution: "temurin"
           server-id: central
           server-username: MAVEN_CENTRAL_USERNAME
-          server-password: MAVEN_CENTRAL_PASSWORD
+          server-password: MAVEN_CENTRAL_TOKEN
           gpg-private-key: ${{ secrets.REQSTOOL_PRIVATE_GPG_KEY }}
           gpg-passphrase: REQSTOOL_PRIVATE_GPG_PASSPHRASE
       - name: Publish to the Maven Central Repository
         run: mvn clean deploy
         env:
-          MAVEN_CENTRAL_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_CENTRAL_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          REQSTOOL_PRIVATE_GPG_PASSPHRASE: ${{ secrets.REQSTOOL_PRIVATE_GPG_KEY_PASSPHRASE }}
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
+          REQSTOOL_PRIVATE_GPG_PASSPHRASE: ${{ secrets.REQSTOOL_PRIVATE_GPG_PASSPHRASE }}
+
