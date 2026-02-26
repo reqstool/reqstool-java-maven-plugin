@@ -1,5 +1,5 @@
-// Copyright © LFV
-package se.lfv.reqstool.plugins.maven;
+// Copyright © reqstool
+package io.github.reqstool.plugins.maven;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,6 +47,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 
+/**
+ * Maven Mojo for assembling and attaching reqstool artifacts. This plugin packages
+ * requirements, test results, and annotations into a ZIP artifact during the verify phase
+ * of the Maven build lifecycle.
+ */
 @Mojo(name = "assemble-and-attach-zip-artifact", defaultPhase = LifecyclePhase.VERIFY)
 public class RequirementsToolMojo extends AbstractMojo {
 
@@ -54,32 +59,45 @@ public class RequirementsToolMojo extends AbstractMojo {
 
 	private static final String[] OUTPUT_ARTIFACT_TEST_RESULTS_PATTERN = { "test_results/**/*.xml" };
 
+	/** Input file name for manual verification results. */
 	public static final String INPUT_FILE_MANUAL_VERIFICATION_RESULTS_YML = "manual_verification_results.yml";
 
+	/** Input file name for requirements. */
 	public static final String INPUT_FILE_REQUIREMENTS_YML = "requirements.yml";
 
+	/** Input file name for software verification cases. */
 	public static final String INPUT_FILE_SOFTWARE_VERIFICATION_CASES_YML = "software_verification_cases.yml";
 
+	/** Input dataset directory path. */
 	public static final String INPUT_PATH_DATASET = "reqstool";
 
+	/** Output file name for annotations. */
 	public static final String OUTPUT_FILE_ANNOTATIONS_YML_FILE = "annotations.yml";
 
 	private static final String OUTPUT_ARTIFACT_CLASSIFIER = "reqstool";
 
+	/** Output artifact file name for reqstool configuration. */
 	public static final String OUTPUT_ARTIFACT_FILE_REQSTOOL_CONFIG_YML = "reqstool_config.yml";
 
+	/** Output artifact directory name for test results. */
 	public static final String OUTPUT_ARTIFACT_DIR_TEST_RESULTS = "test_results";
 
+	/** XML element name for implementations. */
 	public static final String XML_IMPLEMENTATIONS = "implementations";
 
+	/** XML element name for requirement annotations. */
 	public static final String XML_REQUIREMENT_ANNOTATIONS = "requirement_annotations";
 
+	/** XML element name for tests. */
 	public static final String XML_TESTS = "tests";
 
-	protected static final String YAML_LANG_SERVER_SCHEMA_ANNOTATIONS = "# yaml-language-server: $schema=https://raw.githubusercontent.com/Luftfartsverket/reqstool-client/main/src/reqstool/resources/schemas/v1/annotations.schema.json";
+	/** YAML language server schema annotation. */
+	protected static final String YAML_LANG_SERVER_SCHEMA_ANNOTATIONS = "# yaml-language-server: $schema=https://raw.githubusercontent.com/reqstool/reqstool-client/main/src/reqstool/resources/schemas/v1/annotations.schema.json";
 
-	protected static final String YAML_LANG_SERVER_SCHEMA_CONFIG = "# yaml-language-server: $schema=https://raw.githubusercontent.com/Luftfartsverket/reqstool-client/main/src/reqstool/resources/schemas/v1/reqstool_config.schema.json";
+	/** YAML language server schema for configuration. */
+	protected static final String YAML_LANG_SERVER_SCHEMA_CONFIG = "# yaml-language-server: $schema=https://raw.githubusercontent.com/reqstool/reqstool-client/main/src/reqstool/resources/schemas/v1/reqstool_config.schema.json";
 
+	/** ObjectMapper for YAML serialization and deserialization. */
 	protected static final ObjectMapper yamlMapper;
 
 	static {
@@ -122,6 +140,16 @@ public class RequirementsToolMojo extends AbstractMojo {
 	@Parameter(property = "reqstool.skipAttachZipArtifact", defaultValue = "false")
 	private boolean skipAttachZipArtifact;
 
+	/** Default constructor. */
+	public RequirementsToolMojo() {
+	}
+
+	/**
+	 * Executes the Mojo goal to assemble and attach the reqstool ZIP artifact. Combines
+	 * requirement and test annotations, assembles them into a ZIP file with requirements
+	 * and test results, and attaches the artifact to the Maven project.
+	 * @throws MojoExecutionException if an error occurs during execution
+	 */
 	public void execute() throws MojoExecutionException {
 		if (skip) {
 			getLog().info("Skipping execution of reqstool plugin");
