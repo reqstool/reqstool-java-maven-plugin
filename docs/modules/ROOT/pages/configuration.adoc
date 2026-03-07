@@ -1,192 +1,139 @@
 == Configuration
 
-To configure the plugin add a `<configuration>` block for the plugin under the `<build>` in pom.xml.
+The plugin provides sensible defaults, but you can customize if needed by adding a `<configuration>` block in your `pom.xml`:
 
-== Complete Configuration Example
+=== Complete Configuration Example
 
-```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>io.github.reqstool</groupId>
-            <artifactId>reqstool-maven-plugin</artifactId>
-            <version>1.0.4</version>
-            <configuration>
-                <!-- File Paths -->
-                <requirementsAnnotationsFile>
-                  ${project.build.directory}/generated-sources/annotations/resources/annotations.yml
-                </requirementsAnnotationsFile>
-                <svcsAnnotationsFile>
-                  ${project.build.directory}/generated-test-sources/test-annotations/resources/annotations.yml
-                </svcsAnnotationsFile>
-                <outputDirectory>
-                  ${project.build.directory}/reqstool
-                </outputDirectory>
-                <datasetPath>${project.basedir}/reqstool</datasetPath>
+[source,xml]
+----
+<configuration>
+    <!-- Path to requirements annotations YAML -->
+    <!-- Default: ${project.build.directory}/generated-sources/annotations/resources/annotations.yml -->
+    <requirementsAnnotationsFile>
+        ${project.build.directory}/generated-sources/annotations/resources/annotations.yml
+    </requirementsAnnotationsFile>
 
-                <!-- Test Results -->
-                <testResults>
-                    <testResult>target/surefire-reports/**/*.xml</testResult>
-                    <testResult>target/failsafe-reports/**/*.xml</testResult>
-                </testResults>
+    <!-- Path to SVCS (Software Verification Cases) annotations YAML -->
+    <!-- Default: ${project.build.directory}/generated-test-sources/test-annotations/resources/annotations.yml -->
+    <svcsAnnotationsFile>
+        ${project.build.directory}/generated-test-sources/test-annotations/resources/annotations.yml
+    </svcsAnnotationsFile>
 
-                <!-- Project Reference -->
-                <project>${project}</project>
-                <log>${log}</log>
+    <!-- Output directory for ZIP and combined annotations -->
+    <!-- Default: ${project.build.directory}/reqstool -->
+    <outputDirectory>${project.build.directory}/reqstool</outputDirectory>
 
-                <!-- Execution Controls -->
-                <skip>false</skip>
-                <skipAssembleZipArtifact>false</skipAssembleZipArtifact>
-                <skipAttachZipArtifact>false</skipAttachZipArtifact>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-```
+    <!-- Dataset directory containing requirements.yml and optional files -->
+    <!-- Default: ${project.basedir}/reqstool -->
+    <datasetPath>${project.basedir}/reqstool</datasetPath>
 
-== Configuration Parameters
+    <!-- Test result file patterns (Ant-style) -->
+    <testResults>
+        <testResult>target/surefire-reports/**/*.xml</testResult>
+        <testResult>target/failsafe-reports/**/*.xml</testResult>
+    </testResults>
 
-=== requirementsAnnotationsFile
+    <!-- Skip entire plugin execution (default: false) -->
+    <skip>false</skip>
+
+    <!-- Skip ZIP assembly but keep annotation combining (default: false) -->
+    <skipAssembleZipArtifact>false</skipAssembleZipArtifact>
+
+    <!-- Skip artifact attachment for deployment (default: false) -->
+    <skipAttachZipArtifact>false</skipAttachZipArtifact>
+</configuration>
+----
+
+=== Configuration Parameters
+
+==== requirementsAnnotationsFile
 
 The `requirementsAnnotationsFile` parameter specifies the path to the requirements annotations file.
 Defaults to the value set below.
 
-```xml
-<configuration>
-    <requirementsAnnotationsFile>
-        ${project.build.directory}/generated-sources/annotations/resources/annotations.yml
-    </requirementsAnnotationsFile>
-</configuration>
+[source,xml]
+----
+<requirementsAnnotationsFile>
+    ${project.build.directory}/generated-sources/annotations/resources/annotations.yml
+</requirementsAnnotationsFile>
+----
 
-```
+==== svcsAnnotationsFile
 
-=== svcsAnnotationsFile
-
-The `svcsAnnotationsFile` parameter specifies the path to the svcs annotations file.
+The `svcsAnnotationsFile` parameter specifies the path to the SVCS (Software Verification Cases) annotations file.
 Defaults to the value set below.
 
-```xml
-<configuration>
-    <svcsAnnotationsFile>
-        ${project.build.directory}/generated-test-sources/test-annotations/resources/annotations.yml
-    </svcsAnnotationsFile>
-</configuration>
+[source,xml]
+----
+<svcsAnnotationsFile>
+    ${project.build.directory}/generated-test-sources/test-annotations/resources/annotations.yml
+</svcsAnnotationsFile>
+----
 
-```
-
-=== outputDirectory
+==== outputDirectory
 
 The `outputDirectory` parameter specifies the path to where to put the generated output.
 Defaults to the value set below.
 
-```xml
-<configuration>
-    <outputDirectory>
-        ${project.build.directory}/reqstool
-    </outputDirectory>
-</configuration>
+[source,xml]
+----
+<outputDirectory>${project.build.directory}/reqstool</outputDirectory>
+----
 
-```
+==== datasetPath
 
-=== datasetPath
-
-The `datasetPath` parameter specifies the path to the dataset.
+The `datasetPath` parameter specifies the path to the dataset directory containing `requirements.yml` and optional files.
 Defaults to the value set below.
 
-```xml
-<configuration>
-    <datasetPath>
-        ${project.basedir}/reqstool
-    </datasetPath>
-</configuration>
+[source,xml]
+----
+<datasetPath>${project.basedir}/reqstool</datasetPath>
+----
 
-```
+==== testResults
 
-=== project
+The `testResults` parameter specifies one or more test result file patterns.
+Supports Ant-style pattern matching.
 
-The `project` parameter specifies the name of the maven project.
-Defaults to the value set below.
+[source,xml]
+----
+<testResults>
+    <testResult>target/surefire-reports/**/*.xml</testResult>
+    <testResult>target/failsafe-reports/**/*.xml</testResult>
+</testResults>
+----
 
-```xml
-<configuration>
-    <project>
-        ${project}
-    </project>
-</configuration>
+==== skip
 
-```
+Skip the execution of the entire plugin.
+Defaults to `false`.
 
-=== testResults
+[source,xml]
+----
+<skip>false</skip>
+----
 
-The `testResults` parameter specifies one or more testResult paths.
+==== skipAssembleZipArtifact
 
-```xml
-<configuration>
-    <testResults>
-        <testResult>path/to/test/result.xml</testResult>
-        <testResult>path/to/test/result.xml</testResult>
-    </testResults>
-</configuration>
+Skip ZIP artifact assembly but continue with annotation combining.
+Defaults to `false`.
 
-```
+[source,xml]
+----
+<skipAssembleZipArtifact>false</skipAssembleZipArtifact>
+----
 
-=== log
+==== skipAttachZipArtifact
 
-The `log` parameter specifies the log.
-Defaults to the value set below.
+Skip artifact attachment for deployment.
+Defaults to `false`.
 
-```xml
-<configuration>
-    <log>
-        ${log}
-    </log>
-</configuration>
+[source,xml]
+----
+<skipAttachZipArtifact>false</skipAttachZipArtifact>
+----
 
-```
-
-=== skip
-
-Skip the execution of the plugin.
-Defaults to the value set below.
-
-```xml
-<configuration>
-    <skip>
-        false
-    </skip>
-</configuration>
-
-```
-
-=== skipAssembleZipArtifact
-
-Skip zip artifact assembly.
-Defaults to the value set below.
-
-```xml
-<configuration>
-    <skipAssembleZipArtifact>
-        false
-    </skipAssembleZipArtifact>
-</configuration>
-
-```
-
-=== skipAttachZipArtifact
-
-Skip zip artifact attachment.
-Defaults to the value set below.
-
-```xml
-<configuration>
-    <skipAttachZipArtifact>
-        false
-    </skipAttachZipArtifact>
-</configuration>
-
-```
-
-Notes:
+=== Notes
 
 * All path parameters support both absolute and relative paths
 * Maven property placeholders (`${...}`) can be used in all configuration values
