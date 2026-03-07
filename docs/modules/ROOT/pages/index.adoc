@@ -2,7 +2,7 @@
 
 This Maven plugin generates a ZIP artifact containing combined annotations and various reports for Reqstool. It provides sensible defaults while allowing full customization.
 
-=== Features
+== Features
 
 * *Sensible defaults*: Works out of the box with standard Maven project layouts
 * *Automatic lifecycle integration*: Runs in the `verify` phase to ensure tests complete first
@@ -10,9 +10,9 @@ This Maven plugin generates a ZIP artifact containing combined annotations and v
 * *Combines annotations*: Merges requirements annotations from implementation and test code
 * *Assembles ZIP artifact*: Creates structured ZIP containing requirements, test results, and configuration
 
-=== Quick Start
+== Quick Start
 
-==== Add the Plugin
+== Add the Plugin
 
 [source,xml]
 ----
@@ -34,7 +34,7 @@ This Maven plugin generates a ZIP artifact containing combined annotations and v
 </build>
 ----
 
-==== Default Behavior
+== Default Behavior
 
 The plugin automatically:
 
@@ -49,7 +49,7 @@ The plugin automatically:
    * `reqstool_config.yml` (configuration manifest)
 4. Attaches the ZIP for deployment to Maven repositories
 
-==== Minimal Setup
+== Minimal Setup
 
 Create a `reqstool/` directory in your project root with a `requirements.yml` file:
 
@@ -64,10 +64,10 @@ my-project/
 
 Run `mvn verify` and the ZIP artifact will be created automatically.
 
-=== Prerequisites
+== Prerequisites
 
 * Maven 3.9+
-* Java 17+
+* Java 8+
 * A `requirements.yml` file in the dataset directory (default: `./reqstool/`)
 
 == License
