@@ -1,9 +1,75 @@
 = Reqstool Maven Plugin
 
-include::description.adoc[]
+This Maven plugin generates a ZIP artifact containing combined annotations and various reports for Reqstool. It provides sensible defaults while allowing full customization.
 
-include::configuration.adoc[]
+=== Features
 
-include::usage.adoc[]
+* *Sensible defaults*: Works out of the box with standard Maven project layouts
+* *Automatic lifecycle integration*: Runs in the `verify` phase to ensure tests complete first
+* *Maven repository publishing*: ZIP artifact is attached for deployment to Maven repositories
+* *Combines annotations*: Merges requirements annotations from implementation and test code
+* *Assembles ZIP artifact*: Creates structured ZIP containing requirements, test results, and configuration
 
-include::license.adoc[]
+=== Quick Start
+
+==== Add the Plugin
+
+[source,xml]
+----
+<build>
+    <plugins>
+        <plugin>
+            <groupId>io.github.reqstool</groupId>
+            <artifactId>reqstool-maven-plugin</artifactId>
+            <version>1.0.4</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>assemble-and-attach-zip-artifact</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+----
+
+==== Default Behavior
+
+The plugin automatically:
+
+1. Runs during the `verify` phase (after all tests complete)
+2. Combines annotation files from `target/generated-sources/` and `target/generated-test-sources/`
+3. Creates a ZIP artifact in `target/reqstool/` containing:
+   * `requirements.yml` (from `./reqstool/` directory)
+   * `software_verification_cases.yml` (optional)
+   * `manual_verification_results.yml` (optional)
+   * `annotations.yml` (combined/merged annotations)
+   * `test_results/` (XML test results from Surefire and Failsafe)
+   * `reqstool_config.yml` (configuration manifest)
+4. Attaches the ZIP for deployment to Maven repositories
+
+==== Minimal Setup
+
+Create a `reqstool/` directory in your project root with a `requirements.yml` file:
+
+[source]
+----
+my-project/
+├── pom.xml
+├── reqstool/
+│   └── requirements.yml  (mandatory)
+└── src/
+----
+
+Run `mvn verify` and the ZIP artifact will be created automatically.
+
+=== Prerequisites
+
+* Maven 3.9+
+* Java 17+
+* A `requirements.yml` file in the dataset directory (default: `./reqstool/`)
+
+== License
+
+MIT License.
