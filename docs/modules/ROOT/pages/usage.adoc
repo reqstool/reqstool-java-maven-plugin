@@ -1,8 +1,11 @@
 == Usage
 
-To use the Reqstool Java Maven Plugin, add the following configuration to your Maven project's `pom.xml`:
+To use the reqstool Maven Plugin, add the following configuration to your Maven project's `pom.xml`:
 
-```xml
+=== Basic Usage
+
+[source,xml]
+----
 <build>
     <plugins>
         <plugin>
@@ -16,19 +19,56 @@ To use the Reqstool Java Maven Plugin, add the following configuration to your M
                     </goals>
                 </execution>
             </executions>
-            <dependencies>
-                <dependency>
-                    <groupId>io.github.reqstool</groupId>
-                    <artifactId>reqstool-java-annotations</artifactId>
-                    <version>1.0.4</version>
-                </dependency>
-            </dependencies>
         </plugin>
     </plugins>
 </build>
-```
+----
 
-The default `<phase>` the plugin runs during is `verify`, this is done to ensure all test files are generated before the plugin runs.
+The plugin will automatically integrate with the standard Maven build lifecycle.
 
+=== Annotation Dependency
 
+To use `@Requirements` and `@SVCs` annotations in your code, add the annotations dependency:
 
+[source,xml]
+----
+<dependencies>
+    <dependency>
+        <groupId>io.github.reqstool</groupId>
+        <artifactId>reqstool-java-annotations</artifactId>
+        <version>1.0.4</version>
+    </dependency>
+</dependencies>
+----
+
+=== Running Manually
+
+The goal can be invoked manually:
+
+[source,bash]
+----
+mvn reqstool:assemble-and-attach-zip-artifact
+----
+
+=== Available Goals
+
+==== assemble-and-attach-zip-artifact
+
+Main goal that:
+
+* Bound to the `verify` phase (ensures tests have run)
+* Combines annotation files
+* Assembles ZIP artifact
+* Attaches artifact for deployment
+
+=== Default Lifecycle
+
+The plugin automatically integrates into the standard Maven build:
+
+1. Plugin is configured with an execution binding
+2. The `assemble-and-attach-zip-artifact` goal runs during `verify` phase
+3. Goal runs after all tests complete (Surefire and Failsafe)
+4. ZIP artifact is created in `target/reqstool/`
+5. Artifact is attached for deployment to Maven repositories
+
+The ZIP artifact will be published with classifier `reqstool` (e.g., `my-app-1.0.0-reqstool.zip`).

@@ -1,3 +1,0 @@
-== Description
-
-This Maven plugin generates a zip artifact containing combined annotations and various reports for Reqstool.
