@@ -1,6 +1,6 @@
 == Usage
 
-To use the Reqstool Maven Plugin, add the following configuration to your Maven project's `pom.xml`:
+To use the reqstool Maven Plugin, add the following configuration to your Maven project's `pom.xml`:
 
 === Basic Usage
 

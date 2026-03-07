@@ -1,6 +1,6 @@
-= Reqstool Maven Plugin
+= reqstool Maven Plugin
 
-This Maven plugin generates a ZIP artifact containing combined annotations and various reports for Reqstool. It provides sensible defaults while allowing full customization.
+This Maven plugin generates a ZIP artifact containing combined annotations and various reports for reqstool. It provides sensible defaults while allowing full customization.
 
 == Features
 
