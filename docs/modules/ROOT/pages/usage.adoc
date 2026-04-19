@@ -1,8 +1,8 @@
-== Usage
+= Usage
 
-To use the reqstool Maven Plugin, add the following configuration to your Maven project's `pom.xml`:
+== Basic usage
 
-=== Basic Usage
+Add the plugin to your `pom.xml` and set `datasetPath` if your dataset directory is not the default `reqstool/`:
 
 [source,xml]
 ----
@@ -19,14 +19,22 @@ To use the reqstool Maven Plugin, add the following configuration to your Maven 
                     </goals>
                 </execution>
             </executions>
+            <configuration>
+                <datasetPath>${project.basedir}/docs/reqstool</datasetPath>
+            </configuration>
         </plugin>
     </plugins>
 </build>
 ----
 
-The plugin will automatically integrate with the standard Maven build lifecycle.
+Run a standard build — the goal is bound to the `verify` phase automatically:
 
-=== Annotation Dependency
+[source,bash]
+----
+mvn clean verify
+----
+
+== Annotation dependency
 
 To use `@Requirements` and `@SVCs` annotations in your code, add the annotations dependency:
 
@@ -41,34 +49,31 @@ To use `@Requirements` and `@SVCs` annotations in your code, add the annotations
 </dependencies>
 ----
 
-=== Running Manually
-
-The goal can be invoked manually:
+== Running the goal manually
 
 [source,bash]
 ----
 mvn reqstool:assemble-and-attach-zip-artifact
 ----
 
-=== Available Goals
+== Goal reference
 
-==== assemble-and-attach-zip-artifact
+=== assemble-and-attach-zip-artifact
 
-Main goal that:
+Default phase: `verify`
 
-* Bound to the `verify` phase (ensures tests have run)
-* Combines annotation files
-* Assembles ZIP artifact
-* Attaches artifact for deployment
+Combines requirements and SVCs annotations into a single `annotations.yml`,
+then (unless `skipAssembleZipArtifact` is set) assembles a ZIP artifact at
+`<outputDirectory>/<finalName>-reqstool.zip` and attaches it to the Maven project
+with classifier `reqstool` and extension `zip`.
 
-=== Default Lifecycle
+== Default lifecycle
 
-The plugin automatically integrates into the standard Maven build:
+[source]
+----
+verify
+ └── assemble-and-attach-zip-artifact
+      (runs after compile, test, integration-test phases)
+----
 
-1. Plugin is configured with an execution binding
-2. The `assemble-and-attach-zip-artifact` goal runs during `verify` phase
-3. Goal runs after all tests complete (Surefire and Failsafe)
-4. ZIP artifact is created in `target/reqstool/`
-5. Artifact is attached for deployment to Maven repositories
-
-The ZIP artifact will be published with classifier `reqstool` (e.g., `my-app-1.0.0-reqstool.zip`).
+ZIP artifact is written to `target/reqstool/<finalName>-reqstool.zip`.
