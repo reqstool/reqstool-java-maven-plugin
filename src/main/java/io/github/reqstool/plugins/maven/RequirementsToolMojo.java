@@ -47,6 +47,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 
+import io.github.reqstool.annotations.Requirements;
+
 /**
  * Maven Mojo for assembling and attaching reqstool artifacts. This plugin packages
  * requirements, test results, and annotations into a ZIP artifact during the verify phase
@@ -150,6 +152,7 @@ public class RequirementsToolMojo extends AbstractMojo {
 	 * and test results, and attaches the artifact to the Maven project.
 	 * @throws MojoExecutionException if an error occurs during execution
 	 */
+	@Requirements({ "MAVEN_PLUGIN_004" })
 	public void execute() throws MojoExecutionException {
 		if (skip) {
 			getLog().info("Skipping execution of reqstool plugin");
@@ -201,6 +204,7 @@ public class RequirementsToolMojo extends AbstractMojo {
 		}
 	}
 
+	@Requirements({ "MAVEN_PLUGIN_001" })
 	static JsonNode combineOutput(JsonNode implementationsNode, JsonNode testsNode) {
 		ObjectNode requirementAnnotationsNode = yamlMapper.createObjectNode();
 		if (!implementationsNode.isEmpty()) {
@@ -227,6 +231,7 @@ public class RequirementsToolMojo extends AbstractMojo {
 		}
 	}
 
+	@Requirements({ "MAVEN_PLUGIN_002" })
 	private void assembleZipArtifact() throws IOException, MojoExecutionException {
 		String zipArtifactFilename = project.getBuild().getFinalName() + "-reqstool.zip";
 		String topLevelDir = project.getBuild().getFinalName() + "-reqstool";
@@ -328,6 +333,7 @@ public class RequirementsToolMojo extends AbstractMojo {
 		}
 	}
 
+	@Requirements({ "MAVEN_PLUGIN_003" })
 	private void attachArtifact() {
 		String zipArtifactFilename = project.getBuild().getFinalName() + "-reqstool.zip";
 		File zipFile = new File(outputDirectory, zipArtifactFilename);
