@@ -45,4 +45,5 @@ buildNumber.properties
 ### VisualStudioCode ###
 .vscode/*
 
-.claude/
+.claude/*
+!.claude/settings.json
