@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/reqstool/reqstool-client/main/src/reqstool/resources/schemas/v1/requirements.schema.json
+
+metadata:
+  urn: reqstool-java-maven-plugin
+  variant: microservice
+  title: Reqstool Java Maven Plugin
+  url: https://github.com/reqstool/reqstool-java-maven-plugin
+
+requirements:
+  - id: MAVEN_PLUGIN_001
+    title: Combine requirement and SVC annotations into a single annotations.yml
+    significance: shall
+    description: >-
+      The plugin shall combine the requirement-annotation and SVC-annotation
+      files produced by the annotation processor (one from main sources, one
+      from test sources) into a single annotations.yml, preserving any
+      entries already present under each section.
+    categories: [functional-suitability]
+    revision: "0.1.0"
+  - id: MAVEN_PLUGIN_002
+    title: Assemble the reqstool zip artifact during the verify phase
+    significance: shall
+    description: >-
+      During the verify phase, the plugin shall assemble a zip artifact
+      containing the mandatory requirements.yml, the optional
+      software_verification_cases.yml/manual_verification_results.yml/annotations.yml
+      when present, any test result files matching the configured patterns,
+      and a generated reqstool_config.yml describing the included resources.
+    categories: [functional-suitability]
+    revision: "0.1.0"
+  - id: MAVEN_PLUGIN_003
+    title: Attach the assembled zip artifact to the Maven project
+    significance: shall
+    description: >-
+      The plugin shall attach the assembled zip artifact to the Maven
+      project under the "reqstool" classifier, so it is installed/deployed
+      alongside the project's other artifacts.
+    categories: [functional-suitability]
+    revision: "0.1.0"
+  - id: MAVEN_PLUGIN_004
+    title: Honor skip flags to bypass execution, zip assembly, or artifact attachment
+    significance: shall
+    description: >-
+      The plugin shall support independent skip/skipAssembleZipArtifact/skipAttachZipArtifact
+      flags, so the whole goal, just the zip assembly, or just the artifact
+      attachment can be bypassed without modifying the rest of the build.
+    categories: [functional-suitability]
+    revision: "0.1.0"

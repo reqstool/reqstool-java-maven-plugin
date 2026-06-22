@@ -2,7 +2,12 @@
 package io.github.reqstool.plugins.maven;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,11 +20,44 @@ import java.nio.file.Path;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import io.github.reqstool.annotations.SVCs;
 
 class RequirementsToolMojoTests {
 
+	private static void setField(Object target, String fieldName, Object value) throws Exception {
+		Field field = RequirementsToolMojo.class.getDeclaredField(fieldName);
+		field.setAccessible(true);
+		field.set(target, value);
+	}
+
+	private static RequirementsToolMojo newMojoForExecute(File outputDirectory, MavenProjectHelper projectHelper)
+			throws Exception {
+		RequirementsToolMojo mojo = new RequirementsToolMojo();
+
+		MavenProject mavenProject = new MavenProject();
+		Build build = new Build();
+		build.setFinalName("test-project");
+		mavenProject.setBuild(build);
+		Field basedirField = mavenProject.getClass().getDeclaredField("basedir");
+		basedirField.setAccessible(true);
+		basedirField.set(mavenProject, outputDirectory);
+
+		setField(mojo, "project", mavenProject);
+		setField(mojo, "projectHelper", projectHelper);
+		setField(mojo, "outputDirectory", outputDirectory);
+		setField(mojo, "requirementsAnnotationsFile",
+				new File(outputDirectory, "missing-requirements-annotations.yml"));
+		setField(mojo, "svcsAnnotationsFile", new File(outputDirectory, "missing-svcs-annotations.yml"));
+		setField(mojo, "testResults", new String[] { "test_results/**/*.xml" });
+		return mojo;
+	}
+
+	@SVCs("SVC_MAVEN_PLUGIN_001")
 	@Test
 	void testCombine() throws IOException {
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -48,6 +86,7 @@ class RequirementsToolMojoTests {
 		assertEquals(combinedFileContentAsString, combinedResult, "The combined annotations files should match");
 	}
 
+	@SVCs("SVC_MAVEN_PLUGIN_002")
 	@Test
 	void testAssembleZipArtifact() throws Exception {
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -68,20 +107,10 @@ class RequirementsToolMojoTests {
 		basedirField.set(mockProject, zipResourcePath.toFile());
 
 		// Set up all required fields
-		Field projectField = RequirementsToolMojo.class.getDeclaredField("project");
-		Field outputDirectoryField = RequirementsToolMojo.class.getDeclaredField("outputDirectory");
-		Field datasetPathField = RequirementsToolMojo.class.getDeclaredField("datasetPath");
-		Field testResultsField = RequirementsToolMojo.class.getDeclaredField("testResults");
-
-		projectField.setAccessible(true);
-		outputDirectoryField.setAccessible(true);
-		datasetPathField.setAccessible(true);
-		testResultsField.setAccessible(true);
-
-		projectField.set(mojo, mockProject);
-		outputDirectoryField.set(mojo, zipResourcePath.toFile());
-		datasetPathField.set(mojo, zipResourcePath.toFile());
-		testResultsField.set(mojo, new String[] { "test_results/**/*.xml" });
+		setField(mojo, "project", mockProject);
+		setField(mojo, "outputDirectory", zipResourcePath.toFile());
+		setField(mojo, "datasetPath", zipResourcePath.toFile());
+		setField(mojo, "testResults", new String[] { "test_results/**/*.xml" });
 
 		// Create mandatory requirements.yml file
 		File reqFile = new File(zipResourcePath.toFile(), "requirements.yml");
@@ -96,6 +125,71 @@ class RequirementsToolMojoTests {
 
 		// Only check if zip file exists
 		assertTrue(Files.exists(zipResourcePath.resolve("test-project-reqstool.zip")));
+	}
+
+	@SVCs("SVC_MAVEN_PLUGIN_003")
+	@Test
+	void testAttachArtifactPassesAssembledZipUnderReqstoolClassifier(@TempDir File outputDirectory) throws Exception {
+		MavenProjectHelper projectHelper = mock(MavenProjectHelper.class);
+		RequirementsToolMojo mojo = newMojoForExecute(outputDirectory, projectHelper);
+		setField(mojo, "skipAssembleZipArtifact", true);
+		setField(mojo, "datasetPath", outputDirectory);
+
+		File requirementsFile = new File(outputDirectory, "requirements.yml");
+		Files.write(requirementsFile.toPath(), "requirements: []\n".getBytes());
+
+		mojo.execute();
+
+		Field projectField = RequirementsToolMojo.class.getDeclaredField("project");
+		projectField.setAccessible(true);
+		MavenProject project = (MavenProject) projectField.get(mojo);
+		verify(projectHelper).attachArtifact(eq(project), eq("zip"), eq("reqstool"),
+				eq(new File(outputDirectory, "test-project-reqstool.zip")));
+	}
+
+	@SVCs("SVC_MAVEN_PLUGIN_004")
+	@Test
+	void testSkipBypassesExecutionEntirely(@TempDir File outputDirectory) throws Exception {
+		MavenProjectHelper projectHelper = mock(MavenProjectHelper.class);
+		RequirementsToolMojo mojo = newMojoForExecute(outputDirectory, projectHelper);
+		setField(mojo, "skip", true);
+
+		mojo.execute();
+
+		assertFalse(new File(outputDirectory, RequirementsToolMojo.OUTPUT_FILE_ANNOTATIONS_YML_FILE).exists());
+		verifyNoInteractions(projectHelper);
+	}
+
+	@SVCs("SVC_MAVEN_PLUGIN_004")
+	@Test
+	void testSkipAssembleZipArtifactBypassesZipCreation(@TempDir File outputDirectory) throws Exception {
+		MavenProjectHelper projectHelper = mock(MavenProjectHelper.class);
+		RequirementsToolMojo mojo = newMojoForExecute(outputDirectory, projectHelper);
+		setField(mojo, "skipAssembleZipArtifact", true);
+		setField(mojo, "skipAttachZipArtifact", true);
+
+		mojo.execute();
+
+		assertTrue(new File(outputDirectory, RequirementsToolMojo.OUTPUT_FILE_ANNOTATIONS_YML_FILE).exists());
+		assertFalse(new File(outputDirectory, "test-project-reqstool.zip").exists());
+		verifyNoInteractions(projectHelper);
+	}
+
+	@SVCs("SVC_MAVEN_PLUGIN_004")
+	@Test
+	void testSkipAttachZipArtifactBypassesArtifactAttachment(@TempDir File outputDirectory) throws Exception {
+		MavenProjectHelper projectHelper = mock(MavenProjectHelper.class);
+		RequirementsToolMojo mojo = newMojoForExecute(outputDirectory, projectHelper);
+		setField(mojo, "datasetPath", outputDirectory);
+		setField(mojo, "skipAttachZipArtifact", true);
+
+		File requirementsFile = new File(outputDirectory, "requirements.yml");
+		Files.write(requirementsFile.toPath(), "requirements: []\n".getBytes());
+
+		mojo.execute();
+
+		assertTrue(new File(outputDirectory, "test-project-reqstool.zip").exists());
+		verifyNoInteractions(projectHelper);
 	}
 
 }
