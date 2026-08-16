@@ -8,7 +8,8 @@
     <groupId>io.github.reqstool</groupId>
     <artifactId>reqstool-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.0.4</version>
+    <!-- Derived from git state by the Nisse core extension (.mvn/extensions.xml). -->
+    <version>${nisse.jgit.dynamicVersion}</version>
 
     <name>${project.artifactId}</name>
     <description>Reqstool - Maven Plugin</description>
