@@ -6,7 +6,9 @@ on:
     types: [opened, edited, synchronize, reopened]
 
 permissions:
-  contents: read
+  # The callee reads PR metadata to validate the title; contents is not enough,
+  # and a callee may not request more than it is granted.
+  pull-requests: read
 
 jobs:
   check:
