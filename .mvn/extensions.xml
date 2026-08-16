@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extensions>
+    <!-- Derives ${nisse.jgit.dynamicVersion} from git state, so the tag is the
+         only version. See RELEASING.md in reqstool/.github. -->
+    <extension>
+        <groupId>eu.maveniverse.maven.nisse</groupId>
+        <artifactId>extension</artifactId>
+        <version>0.9.5</version>
+    </extension>
+</extensions>
