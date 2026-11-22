@@ -91,7 +91,7 @@ class RequirementsToolMojoTests {
 	void testAssembleZipArtifact() throws Exception {
 		ClassLoader classLoader = getClass().getClassLoader();
 		URL resourcePath = classLoader.getResource("zip");
-		Path zipResourcePath = Paths.get(resourcePath.getFile());
+		Path zipResourcePath = Paths.get(resourcePath.toURI());
 
 		RequirementsToolMojo mojo = new RequirementsToolMojo();
 

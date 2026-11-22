@@ -1,0 +1,2 @@
+# Test fixtures are compared byte for byte with generated output (LF), so never CRLF-translate them.
+src/test/resources/** text eol=lf
