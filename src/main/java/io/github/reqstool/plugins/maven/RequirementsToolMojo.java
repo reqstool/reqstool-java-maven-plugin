@@ -226,7 +226,7 @@ public class RequirementsToolMojo extends AbstractMojo {
 
 		try (Writer writer = new PrintWriter(
 				new OutputStreamWriter(new FileOutputStream(outputFile), StandardCharsets.UTF_8))) {
-			writer.write(YAML_LANG_SERVER_SCHEMA_ANNOTATIONS + System.lineSeparator());
+			writer.write(YAML_LANG_SERVER_SCHEMA_ANNOTATIONS + "\n");
 			yamlMapper.writeValue(writer, combinedOutputNode);
 		}
 	}

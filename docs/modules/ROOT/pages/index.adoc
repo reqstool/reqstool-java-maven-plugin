@@ -70,7 +70,7 @@ Run `mvn verify` and the ZIP artifact will be created automatically.
 == Prerequisites
 
 * Maven 3.9+
-* Java 21+
+* Java 25+
 * A `requirements.yml` file in the dataset directory (default: `reqstool/`)
 
 == License
