@@ -41,7 +41,7 @@ permissions:
 
 jobs:
   prepare:
-    uses: reqstool/.github/.github/workflows/common-release-prepare.yml@ff7323b2f1214898e8f3191ffab3d8bdf478f208 # 1.3.1
+    uses: reqstool/.github/.github/workflows/common-release-prepare.yml@ea3dbab0d008dc916896835d211f9238d0a4b113 # 1.3.2
     permissions:
       contents: read
     with:
@@ -67,7 +67,7 @@ jobs:
   tag:
     needs: [prepare, checks]
     if: ${{ !inputs.dry-run }}
-    uses: reqstool/.github/.github/workflows/common-release-tag.yml@ff7323b2f1214898e8f3191ffab3d8bdf478f208 # 1.3.1
+    uses: reqstool/.github/.github/workflows/common-release-tag.yml@ea3dbab0d008dc916896835d211f9238d0a4b113 # 1.3.2
     permissions:
       contents: write
     with:
@@ -80,7 +80,7 @@ jobs:
   # `version` makes a disagreement a hard stop before anything reaches Central.
   publish-to-maven-central:
     needs: [prepare, tag]
-    uses: reqstool/.github/.github/workflows/java-publish-to-maven.yml@ff7323b2f1214898e8f3191ffab3d8bdf478f208 # 1.3.1
+    uses: reqstool/.github/.github/workflows/java-publish-to-maven.yml@ea3dbab0d008dc916896835d211f9238d0a4b113 # 1.3.2
     permissions:
       contents: read
       packages: write
@@ -109,7 +109,7 @@ jobs:
   finalize:
     needs: [prepare, publish-to-maven-central]
     if: ${{ !inputs.dry-run && !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && needs.publish-to-maven-central.result == 'success' }}
-    uses: reqstool/.github/.github/workflows/common-release-finalize.yml@ff7323b2f1214898e8f3191ffab3d8bdf478f208 # 1.3.1
+    uses: reqstool/.github/.github/workflows/common-release-finalize.yml@ea3dbab0d008dc916896835d211f9238d0a4b113 # 1.3.2
     permissions:
       contents: write
     with:
